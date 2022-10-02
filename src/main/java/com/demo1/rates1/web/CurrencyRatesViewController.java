@@ -103,11 +103,16 @@ public class CurrencyRatesViewController {
 		if (currencyCodes_optional.isEmpty()) 
 		{
 			try {
-				
+			
+
+System.out.println("key1="+ currencyRatesApikey );	
 				// Step 1 : make request to Geo Code API
-				String requestURL = new StringBuffer("https://exchange-rates.abstractapi.com/v1/live/?"
-						+ "api_key='+currencyRatesApikey+'&base=USD&target=")
-						.append(currencyCodesInputStr).toString();
+				String requestURL = new StringBuffer("https://exchange-rates.abstractapi.com/v1/live/?")						
+						.append("&base=USD&target=").append(currencyCodesInputStr)
+						.append("&api_key=").append(currencyRatesApikey.trim()).toString();
+
+
+System.out.println("requestURL="+requestURL);
 						
 				ResponseEntity<CurrencyRatesDto> currencyRatesResponseEntity = restTemplate.exchange(requestURL,
 						HttpMethod.GET, null, CurrencyRatesDto.class);

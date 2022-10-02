@@ -1,0 +1,18 @@
+ 
+================================================
+
+
+update Memory allocated using following (by default resources has {}. Update with these values)
+
+        name: ratesinfo1
+        ports:
+        - containerPort: 9080
+          protocol: TCP
+        resources:
+          limits:
+            memory: "2Gi" # this is max limit
+            cpu: "1"
+          requests:
+            memory: "1Gi" # application will memory between 1Gb to 2 GB
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File

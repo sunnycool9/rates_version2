@@ -7,7 +7,6 @@ pipeline {
         oc 'oc'
   }
   environment {
-        //DATE = new Date().format('yy.M')        
         //IMG_TAG = "${DATE}.${BUILD_NUMBER}"
         DATE = new Date().format('yyyddMMHHmmss')
         IMG_TAG = "${DATE}"
@@ -42,7 +41,7 @@ pipeline {
 
           openshift.withCluster("${env.CLUSTER_NAME}") {
             openshift.withProject("${env.DEV_ENV}") {
-               openshift.tag( 'docker.io/sunnycool17/rates1:${IMG_TAG}', 'ratesinfo-project/ratesinfo1:v21')
+               openshift.tag( 'docker.io/sunnycool17/rates1:${IMG_TAG}', 'ratesinfo-project/ratesinfo1:main1')
                echo "completed first rollout"
             }
           }
