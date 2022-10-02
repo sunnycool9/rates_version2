@@ -1,0 +1,39 @@
+kind: Prometheus
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  name: ratesinfo-prometheus
+  namespace: ratesinfo-project
+spec:
+  replicas: 2
+  serviceAccountName: prometheus-k8s
+  serviceMonitorSelector: {}
+  ruleSelector: {}
+  podMonitorSelector: {}
+  probeSelector: {}
+  alerting:
+    alertmanagers:
+      - namespace: monitoring
+        name: alertmanager-main
+        port: web
+
+---
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ratesinfo-prometheus-svc
+  namespace: ratesinfo-project
+spec:
+  selector:
+    matchLabels:
+      app: ratesinfo1
+  endpoints:
+  - basicAuth:
+      password:
+        name: rates-prjsecret
+        key: actuator_pwd
+      username:
+        name: rates-prjsecret
+        key: actuator_uid
+  - port: 9080-tcp
+    path: "/actuator/prometheus"    

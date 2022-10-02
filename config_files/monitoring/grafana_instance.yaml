@@ -1,0 +1,54 @@
+apiVersion: integreatly.org/v1alpha1
+kind: Grafana
+metadata:
+  name: ratesinfo-grafana-instance
+  namespace: ratesinfo-project
+  labels:
+    name: ratesinfo-grafana-instance
+    app: ratesinfo-grafana-app
+    project: ratesinfo-project
+spec:
+  ingress:
+    enabled: true
+  config:
+    auth:
+      disable_signout_menu: false
+    auth.anonymous:
+      enabled: true
+    log:
+      level: warn
+      mode: console
+    security:
+      admin_password: secret11
+      admin_user: root11
+  dashboardLabelSelector:
+    - matchExpressions:
+        - key: app
+          operator: In
+          values:
+            - ratesinfo-grafana-app
+
+---
+
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDataSource
+metadata:
+  name: grafana-datasource
+  namespace: ratesinfo-project
+  labels:
+    name: grafana-datasource
+    app: ratesinfo-grafana-app
+    project: ratesinfo-project
+spec:
+  name: custom-datasources.yaml
+  datasources:
+    - access: proxy
+      isDefault: true
+      name: Prometheus
+      type: prometheus
+      url: 'http://prometheus-operated-ratesinfo-project.apps-crc.testing'
+      version: 1
+      editable: true
+      jsonData:
+        tlsSkipVerify: true
+        timeInterval: "5s"  
