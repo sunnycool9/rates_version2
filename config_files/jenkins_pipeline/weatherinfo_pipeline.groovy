@@ -7,9 +7,12 @@ pipeline {
         oc 'oc'
   }
   environment {
-        //IMG_TAG = "${DATE}.${BUILD_NUMBER}"
         DATE = new Date().format('yyyddMMHHmmss')
         IMG_TAG = "${DATE}"
+		    CLUSTER_NAME="open_cluster1"
+		    DEV_ENV="ratesinfo-project"
+		    GIT_BRANCH="main"
+		    GIT_URL="https://github.com/sunnycool9/rates_version2.git"
   }
   stages {
   stage ('Initialize') {
@@ -22,25 +25,24 @@ pipeline {
       }
     stage('Build App') {
       steps {
-        git branch: "${env.GIT_BRANCH}", credentialsId: 'githubscrt1', url: "${env.GIT_URL}"
-        sh "mvn -DskipTests=true clean compile package"
-        echo "completed first rollout 2"
+        echo "Checking out from Git"
+		    git branch: "${GIT_BRANCH}", credentialsId: 'githubscrt1', url: "${GIT_URL}"
+        sh "mvn -DskipTests=true clean compile package"        
       }
     }
     stage('Build and Deploy Image') {
       steps {
-        // sh "cp target/rates2-ver1.jar ocp/rates2-ver1.jar"
         script {
 
-          docker.build("sunnycool17/rates1:${IMG_TAG}")
-
+          echo "Creating docker image and deploying new docker image"		  
+		      docker.build("sunnycool17/rates1:${IMG_TAG}")
           docker.withRegistry('https://registry.hub.docker.com', 'mydocker_credential') {
                         docker.image("sunnycool17/rates1:${IMG_TAG}").push()
                         docker.image("sunnycool17/rates1:${IMG_TAG}").push("latest")
           }
 
-          openshift.withCluster("${env.CLUSTER_NAME}") {
-            openshift.withProject("${env.DEV_ENV}") {
+          openshift.withCluster("${CLUSTER_NAME}") {
+            openshift.withProject("${DEV_ENV}") {
                openshift.tag( 'docker.io/sunnycool17/rates1:${IMG_TAG}', 'ratesinfo-project/ratesinfo1:main1')
                echo "completed first rollout"
             }
