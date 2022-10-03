@@ -18,11 +18,6 @@
 	<link rel="stylesheet" th:href="@{/css/fontawesome6/css/solid.min.css}"
 		href="../css/fontawesome6/css/solid.min.css" />
 
-	<!-- Favicons -->
-
-	<link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
-
-
 </head>
 
 <body >
@@ -32,7 +27,7 @@
   <!-- Fixed navbar -->
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Weather View</a>
+      <a class="navbar-brand" href="#">Currency Rates View</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -69,6 +64,7 @@
     <p class="pt-5 text-secondary">Current Timestamp: 
 	<span th:text="${#execInfo.now.time}">Current Time</span>
 	</p>
+	<p class="text-secondary">Currently running Application <b>Version 2</b></p>	
 			
 	</main>
 
